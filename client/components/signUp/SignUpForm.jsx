@@ -44,6 +44,7 @@ class SignUpForm extends Component {
    */
   onSubmit(event) {
     event.preventDefault();
+    this.props.userSignUpRequest(this.state);
     console.log(this.state);
   }
   /**
@@ -131,5 +132,8 @@ class SignUpForm extends Component {
     );
   }
 }
+// SignUpForm.propTypes = {
+//   userSignUpRequest: React.PropTypes.func.isRequired
+// }
 export default SignUpForm;
 
