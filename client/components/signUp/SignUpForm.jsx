@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import map from 'lodash/map';
+import classnames from 'classnames';
 import timezones from '../../utils/timezones';
 /**
  *
@@ -20,7 +21,9 @@ class SignUpForm extends Component {
       email: '',
       password: '',
       confirmPassword: '',
-      timezone: ''
+      timezone: '',
+      errors: {},
+      isLoading: false
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -43,8 +46,15 @@ class SignUpForm extends Component {
    * @memberof SignUpForm
    */
   onSubmit(event) {
+    this.setState({ errors: {}, isLoading: true });
     event.preventDefault();
-    this.props.userSignUpRequest(this.state);
+    this.props.userSignUpRequest(this.state)
+    .then(() =>{
+      console.log('>>>>????<<<<<');
+    },
+    (errors) => 
+    this.setState({ errors: errors.response.data.errors, isLoading: false })
+    )
     console.log(this.state);
   }
   /**
@@ -54,6 +64,7 @@ class SignUpForm extends Component {
    * @memberof SignUpForm
    */
   render() {
+    const { errors, isLoading } = this.state;
     const option = map(timezones, (value, key) =>
       <option key={value} value={value}>{key}</option>);
     return (
@@ -63,61 +74,60 @@ class SignUpForm extends Component {
           <label htmlFor="username">Username</label>
           <input
             type="text"
-            className="form-control"
+            className={classnames("form-control",{ 'has-error': errors.username})}
             id="username"
             name="username"
             aria-describedby="usernameNote"
             placeholder="Enter username"
             value={this.state.username}
             onChange={this.onChange}
-            required
           />
-          <small id="usernameNote" className="form-text text-muted">Your username is unique</small>
+          {errors.username && <small className="form-text text-muted">{errors.username}</small>}
         </div>
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
             type="email"
-            className="form-control"
+            className={classnames("form-control",{ 'has-error': errors.email})}
             id="email"
             name="email"
             placeholder="Enter email address"
             value={this.state.email}
             onChange={this.onChange}
-            required
           />
+        {errors.email && <small className="form-text text-muted">{errors.email}</small>}
         </div>
         <div className="form-group">
           <label htmlFor="password">Password</label>
           <input
             type="password"
-            className="form-control"
+            className={classnames("form-control",{ 'has-error': errors.password})}
             name="password"
             value={this.state.password}
             onChange={this.onChange}
             id="password"
             placeholder="Password"
-            required
           />
+        {errors.password && <small className="form-text text-muted">{errors.password}</small>}
         </div>
         <div className="form-group">
           <label htmlFor="confirmPassword">confirm Password</label>
           <input
             type="password"
-            className="form-control"
+            className={classnames("form-control",{ 'has-error': errors.confirmPassword})}
             name="confirmPassword"
             value={this.state.confirmPassword}
             onChange={this.onChange}
             id="confirmPassword"
             placeholder="confirm Password"
-            required
           />
+        {errors.confirmPassword && <small className="form-text text-muted">{errors.confirmPassword}</small>}
         </div>
         <div className="form-group">
           <label htmlFor="timeZone">Select Time zone</label>
           <select
             id="timeZone"
-            className="form-control"
+            className={classnames("form-control",{ 'has-error': errors.timezone})}
             name="timezone"
             value={this.state.timezone}
             onChange={this.onChange}
@@ -125,9 +135,9 @@ class SignUpForm extends Component {
             <option value="" disabled>Choose your timezone</option>
             {option}
           </select>
-
+          {errors.timezone && <small className="form-text text-muted">{errors.timezone}</small>}
         </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button disabled={isLoading} type="submit" className="btn btn-primary">Submit</button>
       </form>
     );
   }

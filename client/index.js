@@ -9,6 +9,7 @@ import App from './components/App';
 import Welcome from './components/Welcome';
 import Players from './components/Players';
 import SignUpPage from './components/signUp/SignUpPage';
+import './styles/styles.scss';
 
 const store = createStore(
   (state={}) => state,

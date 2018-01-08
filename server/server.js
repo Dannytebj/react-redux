@@ -6,7 +6,7 @@ import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
-// import routes from './routes';
+import routes from './routes';
 
 dotenv.config();
 
@@ -19,7 +19,12 @@ const port = parseInt(process.env.PORT, 10) || 2000;
 
 // Set up the express app
 const app = express();
-// const publicPath = express.static(path.join(__dirname, './index.html'));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(routes);
+// Log requests to the console.
+
 
 
 let webpackConfig;
@@ -36,10 +41,7 @@ let webpackConfig;
 //   mongoose.connect(configDB.url_production);
 // }
 
-// Log requests to the console.
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+
 // app.use(expressValidator());
 
 if (process.env.NODE_ENV === 'development') {
