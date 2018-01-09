@@ -1,7 +1,7 @@
 import validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
 
-function ValidateInput (requests) {
+function SignUpValidator (requests) {
 let errors = {};
 if (validator.isNull(requests.email)) {
    errors.email = 'email field is required';
@@ -27,4 +27,4 @@ return {
 }
 }
 
-export default ValidateInput;
+export default SignUpValidator;

@@ -1,4 +1,4 @@
-import validateInput from '../utils/validators';
+import validateInput from '../utils/validators/SignUpValidator';
 
 exports.signUp = (req, res) => {
   const { errors, isValid } = validateInput(req.body);
