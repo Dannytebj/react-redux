@@ -1,10 +1,11 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Switch, Route } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import {createStore, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
+import appHistory from './utils/AppHistory';
 import App from './components/App';
 import Welcome from './components/Welcome';
 import Players from './components/Players';
@@ -16,7 +17,7 @@ const store = createStore(
   applyMiddleware(thunk)
 );
 const Routes = () => (
-  <BrowserRouter>
+  <Router history={appHistory}>
     <App>
       <Switch>
         <Route exact path="/" component={Welcome} />
@@ -24,7 +25,7 @@ const Routes = () => (
         <Route path="/signUp" component={SignUpPage} />
       </Switch>
     </App>
-  </BrowserRouter>
+  </Router>
 );
 render(
   <Provider store={store}>

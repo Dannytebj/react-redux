@@ -3,6 +3,7 @@ import map from 'lodash/map';
 import classnames from 'classnames';
 import timezones from '../../utils/timezones';
 import TextFields from '../commons/TextFields';
+import appHistory from '../../utils/AppHistory';
 import validateInput from '../../../server/utils/validators/SignUpValidator';
 /**
  *
@@ -60,7 +61,7 @@ class SignUpForm extends Component {
       this.setState({ errors: {}, isLoading: true });
       this.props.userSignUpRequest(this.state)
         .then(() => {
-          console.log('>>>>????<<<<<');
+          appHistory.push('/players');
         },
         (errors) =>
           this.setState({ errors: errors.response.data.errors, isLoading: false })
