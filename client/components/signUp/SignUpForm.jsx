@@ -27,10 +27,12 @@ class SignUpForm extends Component {
       confirmPassword: '',
       timezone: '',
       errors: {},
+      invalid: false,
       isLoading: false
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.checkUserExists = this.checkUserExists.bind(this);
   }
   /**
    *
@@ -42,6 +44,25 @@ class SignUpForm extends Component {
     this.setState({
       [event.target.name]: event.target.value
     });
+  }
+  checkUserExists(event) {
+    const field = event.target.name;
+    const val = event.target.value;
+    if (val !== '') {
+      this.props.isUserExists(val)
+        .then(res => {
+          let errors = this.state.errors;
+          let invalid;
+          if (res.data.user) {
+            errors[field] = `A user already exists with this ${field}`;
+            invalid = true;
+          } else {
+            errors[field] = '';
+            invalid = false;
+          }
+          this.setState({ errors, invalid })
+        })
+    }
   }
   isValid() {
     const { isValid, errors } = validateInput(this.state);
@@ -80,7 +101,7 @@ class SignUpForm extends Component {
    * @memberof SignUpForm
    */
   render() {
-    const { errors, isLoading } = this.state;
+    const { errors, isLoading, invalid } = this.state;
     const option = map(timezones, (value, key) =>
       <option key={value} value={value}>{key}</option>);
     return (
@@ -93,6 +114,7 @@ class SignUpForm extends Component {
           onChange={this.onChange}
           value={this.state.username}
           id="username"
+          checkUserExists={this.checkUserExists}
           field="username"
         />
         <TextFields
@@ -101,6 +123,7 @@ class SignUpForm extends Component {
           placeholder="Enter email address"
           onChange={this.onChange}
           value={this.state.email}
+          checkUserExists={this.checkUserExists}
           id="email"
           field="email"
         />
@@ -138,14 +161,15 @@ class SignUpForm extends Component {
           </select>
           {errors.timezone && <small className="form-text text-muted">{errors.timezone}</small>}
         </div>
-        <button disabled={isLoading} type="submit" className="btn btn-primary">Submit</button>
+        <button disabled={isLoading || invalid} type="submit" className="btn btn-primary">Submit</button>
       </form>
     );
   }
 }
-// SignUpForm.propTypes = {
-//   userSignUpRequest: PropTypes.func.isRequired,
-//   addFlashMessage: PropTypes.func.isRequired
-// }
+SignUpForm.propTypes = {
+  userSignUpRequest: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired,
+  isUserExists: PropTypes.func.isRequired
+}
 export default SignUpForm;
 

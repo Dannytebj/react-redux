@@ -4,5 +4,6 @@ import users from '../controllers/usersController';
 const router = express.Router();
 
 router.post('/api/v1/users', users.signUp);
+router.get('/api/v1/users/:identifier', users.uniqueCheck);
 
 export default router;

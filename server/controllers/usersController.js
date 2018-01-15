@@ -24,3 +24,13 @@ exports.signUp = (req, res) => {
       }
     })
 };
+
+exports.uniqueCheck = (req, res) => {
+  User.query({
+    select: ['username', 'email'],
+    where: { email: req.params.identifier },
+    orWhere: {username: req.params.identifier }
+  }).fetch().then(user => {
+    res.json({ user });
+  });
+}
