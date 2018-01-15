@@ -14,7 +14,7 @@ export default () => (
           <NavLink to="/" className="nav-link">Home</NavLink>
         </li>
         <li className="nav-item">
-          <NavLink to="/players" className="nav-link">Players</NavLink>
+          <NavLink to="/dashboard" className="nav-link">DashBoard</NavLink>
         </li>
       </ul>
       <a className="btn btn-outline-success my-2 my-sm-0" href="/signUp">SignUp</a>

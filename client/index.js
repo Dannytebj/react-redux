@@ -9,8 +9,9 @@ import appHistory from './utils/AppHistory';
 import rootReducer from './rootReducer';
 import App from './components/App';
 import Welcome from './components/Welcome';
-import Players from './components/Players';
+import DashBoard from './components/DashBoard';
 import SignUpPage from './components/signUp/SignUpPage';
+import LoginPage from './components/login/LoginPage';
 import './styles/styles.scss';
 
 const store = createStore(
@@ -25,8 +26,10 @@ const Routes = () => (
     <App>
       <Switch>
         <Route exact path="/" component={Welcome} />
-        <Route path="/players" component={Players} />
+        <Route path="/dashboard" component={DashBoard} />
         <Route path="/signUp" component={SignUpPage} />
+        <Route path="/login" component={LoginPage} />
+
       </Switch>
     </App>
   </Router>
