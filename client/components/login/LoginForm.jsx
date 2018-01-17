@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import TextFields from '../commons/TextFields';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -7,6 +7,12 @@ import { login } from '../../actions/login';
 import validateInput from '../../../server/utils/validators/loginValidator';
 
 
+/**
+ *
+ *
+ * @class LoginForm
+ * @extends {Component}
+ */
 class LoginForm extends Component {
   constructor(props) {
     super(props);
@@ -19,6 +25,48 @@ class LoginForm extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
   }
+  /**
+   *
+   * @returns {void}
+   * @param {any} event
+   * @memberof LoginForm
+   */
+  onChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  }
+
+  /**
+   *
+   * @returns {void}
+   * @param {any} event
+   * @memberof LoginForm
+   */
+  onSubmit(event) {
+    event.preventDefault();
+    if (this.isValid()) {
+      this.setState({
+        errors: {},
+        isLoading: true
+      });
+      this.props.login(this.state).then((response) => {
+        appHistory.push('/dashboard');
+      }).catch((errors) => {
+        console.log(errors.response.data.errors, '>>>>> ERRROR ');
+        this.setState({
+          errors: errors.response.data.errors,
+          isLoading: false
+        });
+      });
+    }
+  }
+  /**
+   *
+   *
+   * @returns {void}
+   * @memberof LoginForm
+   */
   isValid() {
     const { errors, isValid } = validateInput(this.state);
     if (!isValid) {
@@ -26,44 +74,10 @@ class LoginForm extends Component {
     }
     return isValid;
   }
-  /**
-   * 
-   * 
-   * @param {any} event 
-   * @memberof LoginForm
-   */
-  onSubmit(event) {
-    event.preventDefault();
-    if(this.isValid()) {
-      this.setState({
-        errors:{},
-        isLoading:true
-      });
-    this.props.login(this.state).then(
-      (response) => {
-      appHistory.push('/dashboard')
-    }).catch((errors) => {
-        console.log(errors.response.data.errors,'>>>>> ERRROR ')
-        this.setState({
-          errors: errors.response.data.errors,
-          isLoading: false
-        });
-      })
-    }
-  }
-  /**
-   * 
-   * 
-   * @param {any} event 
-   * @memberof LoginForm
-   */
-  onChange(event){
-    this.setState({
-      [event.target.name]: event.target.value
-    })
-  }
   render() {
-    const {errors, identifier, password, isLoading } = this.state;
+    const {
+      errors, isLoading
+    } = this.state;
     // console.log(errors,'>>>> Render Errors!!')
     return (
       <form onSubmit={this.onSubmit}>
@@ -88,12 +102,12 @@ class LoginForm extends Component {
           field="password"
           type="password"
         />
-        <button disabled={isLoading } type="submit" className="btn btn-primary">Login</button>
+        <button disabled={isLoading} type="submit" className="btn btn-primary">Login</button>
       </form>
-    )
+    );
   }
 }
 LoginForm.propTypes = {
   login: PropTypes.func.isRequired
-}
-export default connect(null, { login }) (LoginForm)
+};
+export default connect(null, { login })(LoginForm);
